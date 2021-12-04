@@ -249,7 +249,7 @@ app.on('msg', (msg) => {
 ## Initialization
 
 ```js
-    const APP = require('control-crypto')
+    const APP = require('filtergraphy')
     let app = new APP();
 ```
 
