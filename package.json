@@ -1,0 +1,32 @@
+{
+    "name": "filtergraphy",
+    "version": "0.0.1",
+    "description": "Message exchange based on bloom filters and EC e2e cryptography",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gettocat/filtergraphy.git"
+    },
+    "homepage": "https://github.com/gettocat/filtergraphy",
+    "keywords": [],
+    "dependencies": {
+        "bip39": "^3.0.3",
+        "bitowl": "^0.0.2",
+        "bitpony": "^0.0.2",
+        "bloom-filter": "^0.2.0",
+        "elliptic": "^6.5.3",
+        "hash.js": "^1.1.7",
+        "hdkey": "^2.0.1"
+    },
+    "author": "Nanocat <gettocat@github.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "mocha": "^9.0.2"
+    },
+    "bugs": {
+        "url": "https://github.com/gettocat/filtergraphy/issues"
+    },
+    "scripts": {
+        "test": "./node_modules/.bin/mocha test/index.test.js"
+    }
+}
