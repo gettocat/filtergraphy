@@ -250,7 +250,7 @@ class App extends EventEmitter {
                                     hash: hash,
                                     message_id: message.hash
                                 }, () => {
-                                    this.emit("msg", { dialog, meta: res.meta, content: res.content, self: false })
+                                    this.emit("msg", { dialog, meta: res.meta, content: res.content, self: false, hash })
                                     resolve();
                                 });
                             })
@@ -329,7 +329,7 @@ class App extends EventEmitter {
                             hash,
                             message_id: hash
                         }, () => {
-                            this.emit("msg", { dialog: res.dialog, meta: res.meta, content: res.content, self })
+                            this.emit("msg", { dialog: res.dialog, meta: res.meta, content: res.content, self, hash })
                             resolve();
                         });
                     })
