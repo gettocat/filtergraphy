@@ -261,6 +261,7 @@ class App extends EventEmitter {
 
                 if (!!res.dialog && !!res.content) {
 
+                    let self = res.meta.from == res.dialog.localkey;
                     let msg;
                     try {
                         msg = this.messageSchema.read(res.meta.additionData ? res.meta.additionData.getContent() : res.content);
@@ -322,12 +323,13 @@ class App extends EventEmitter {
                     //save message
                     return new Promise(resolve => {
                         this.emit('saveMessage', res.dialog, res.content.toString('hex'), {
+                            self,
                             nonce: message.nonce,
                             time: message.time,
                             hash,
-                            message_id: message.hash
+                            message_id: hash
                         }, () => {
-                            this.emit("msg", { dialog: res.dialog, meta: res.meta, content: res.content })
+                            this.emit("msg", { dialog: res.dialog, meta: res.meta, content: res.content, self })
                             resolve();
                         });
                     })
