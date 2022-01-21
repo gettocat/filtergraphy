@@ -1736,6 +1736,11 @@ class App extends EventEmitter {
             output = '';
         return cr.createHash('sha256').update(message).digest(output);
     }
+    sha256d(message, output) {
+        if (!output)
+            output = '';
+        return cr.createHash('sha256').update(cr.createHash('sha256').update(message).digest()).digest(output);
+    }
 }
 
 App.Crypto = Crypto;
