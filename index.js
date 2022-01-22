@@ -1304,7 +1304,14 @@ class App extends EventEmitter {
                             }
 
                             //todo, check by checksum
-                            let local = this.createMetaChecksum({ localkey: dialog.externalkey, externalkey: dialog.localkey }, meta.time);
+                            let local;
+
+                            if (dialog.localkey == key)
+                                local = this.createMetaChecksum(dialog, meta.time);//outgoing message
+                            else
+                                local = this.createMetaChecksum({ localkey: dialog.externalkey, externalkey: dialog.localkey }, meta.time);
+
+
                             if (local.checksum == meta.checksum) {
                                 //its our candidate
                                 let content = this.decryptPayload(dialog.externalkey, keystore, payload.getContent());
@@ -1329,11 +1336,20 @@ class App extends EventEmitter {
                     if (!key)
                         continue;
 
-                    keys[i].meta = {
-                        from: key.dialog.externalkey,
-                        to: key.keystore.publicKey,
-                        version: meta.version,
-                    };
+                    if (key.key == key.dialog.localkey) {
+                        keys[i].meta = {
+                            from: key.dialog.externalkey,
+                            to: key.keystore.publicKey,
+                            version: meta.version,
+                        };
+                    } else {
+                        keys[i].meta = {
+                            from: key.keystore.publicKey,
+                            to: key.dialog.externalkey,
+                            version: meta.version,
+                        };
+                    }
+
 
                     if (meta.version == Crypto.TEMPKEY) {
                         try {
