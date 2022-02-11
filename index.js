@@ -565,7 +565,7 @@ class App extends EventEmitter {
                                 xpub: mediaData.xpub,
                                 publicKey: mediaData.publicKey,
                             }, () => {
-                                resolve();
+                                resolve(mediaData);
                             })
 
                         });
