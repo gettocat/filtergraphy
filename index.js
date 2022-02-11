@@ -32,9 +32,9 @@ class App extends EventEmitter {
         this.config = {
             proof:
             {
-                period: 3600,
-                target: 10,
-                capacity: 100
+                period: (options.proof && options.proof.period) ? options.proof.period : 3600,
+                target: (options.proof && options.proof.target) ? options.proof.target : 10,
+                capacity: (options.proof && options.proof.capacity) ? options.proof.capacity : 100
             }
         }
 
@@ -496,6 +496,13 @@ class App extends EventEmitter {
             this.emit("removeFollower", localKey, followerKey, resolve);
         });
     }
+
+    createNickname(name) {
+        return this.createMedia(name, 'NICKNAME');
+    }
+    getNickname(name) {
+        return this.getMedia(name);
+    }
     /**
      * media section
      */
@@ -504,7 +511,8 @@ class App extends EventEmitter {
         //type can be:
         //MEDIA_PUBLIC - list of followers with publickeys of followers open in network
         //MEDIA_PRIVATE - list of followers in localstore of media node
-        if (type != 'MEDIA_PUBLIC' && type != 'MEDIA_PRIVATE')
+        //NICKNAME - personal account with nickname
+        if (type != 'MEDIA_PUBLIC' && type != 'MEDIA_PRIVATE' && type != 'NICKNAME')
             throw new Error('Invalid media type');
 
         if (!name)
@@ -612,7 +620,7 @@ class App extends EventEmitter {
             .then((media_data) => {
 
 
-                if (media_data.type == 'MEDIA_PRIVATE') {
+                if (media_data.type == 'MEDIA_PRIVATE' || media_data.type == 'NICKNAME') {
 
                     promise = promise
                         .then(() => {
@@ -754,7 +762,7 @@ class App extends EventEmitter {
             })
             .then(media_data => {
 
-                if (media_data.type == 'MEDIA_PRIVATE') {
+                if (media_data.type == 'MEDIA_PRIVATE' || media_data.type == 'NICKNAME') {
                     promise = promise
                         .then(() => {
                             return new Promise((resolve, reject) => {
@@ -880,10 +888,7 @@ class App extends EventEmitter {
         let media_publicKey;
         let media_xpub;
         let media_key;
-        let sign = ''; //sign 'follow(1)'
-        let _dialog;
         let promise = Promise.resolve();
-        let _k;
 
         return this.getMedia(mediaName)
             .then(media_data => {
@@ -898,7 +903,7 @@ class App extends EventEmitter {
             })
             .then(media_data => {
 
-                if (media_data.type == 'MEDIA_PRIVATE') {
+                if (media_data.type == 'MEDIA_PRIVATE' || media_data.type == 'NICKNAME') {
                     //enumerate all followers from db and send f2f message to each
                     promise = promise
                         .then(() => {
