@@ -466,9 +466,9 @@ class App extends EventEmitter {
             })
         })
     }
-    addDialog(localkey, externalkey) {
+    addDialog(localkey, externalkey, name) {
         return new Promise(resolve => {
-            this.emit("addDialog", localkey, externalkey, resolve);
+            this.emit("addDialog", localkey, externalkey, resolve, name);
         });
     }
     removeDialog(localkey, externalkey) {
@@ -1159,7 +1159,7 @@ class App extends EventEmitter {
                 if (version == Crypto.HELLOPUBLICKEY)
                     return Promise.all([
                         this.removeDialog(tempkey.publicKey, context.externalkey),
-                        this.addDialog(securekey.publicKey, context.externalkey)//, dialog_name)
+                        this.addDialog(securekey.publicKey, context.externalkey, dialogName ? dialogName : "")//, dialog_name)
                     ])
                         .then(() => {
                             return Promise.resolve(buffer);
@@ -1170,7 +1170,7 @@ class App extends EventEmitter {
                     return Promise.all([
                         context.media ? this.removeMediaDialog(context.localkey, context.media) : Promise.resolve(),
                         this.removeDialog(context.localkey, context.externalkey),
-                        this.addDialog(securekey, context.externalkey),
+                        this.addDialog(securekey, context.externalkey, dialogName ? dialogName : ""),
                         context.media ? this.addMediaDialog(securekey, context.media, "@" + context.media) : Promise.resolve()
                     ])
                         .then(() => {

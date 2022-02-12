@@ -82,7 +82,7 @@ All necessary methods are implemented as events that need to be overridden. Belo
 ```js
 
 /*decrypt events*/
-app.on('addDialog', (localkey, externalkey, callback) => {
+app.on('addDialog', (localkey, externalkey, callback, dialogName) => {
     //add dialog to local db
     callback();
 })
