@@ -1,6 +1,6 @@
 {
     "name": "filtergraphy",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "Message exchange based on bloom filters and EC e2e cryptography",
     "main": "index.js",
     "repository": {
