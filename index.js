@@ -1309,15 +1309,10 @@ class App extends EventEmitter {
                             }
 
                             //todo, check by checksum
-                            let local;
+                            let local = this.createMetaChecksum(dialog, meta.time);//outgoing message
+                            let local2 = this.createMetaChecksum({ localkey: dialog.externalkey, externalkey: dialog.localkey }, meta.time);
 
-                            if (dialog.localkey == key)
-                                local = this.createMetaChecksum(dialog, meta.time);//outgoing message
-                            else
-                                local = this.createMetaChecksum({ localkey: dialog.externalkey, externalkey: dialog.localkey }, meta.time);
-
-
-                            if (local.checksum == meta.checksum) {
+                            if (local.checksum == meta.checksum || local2.checksum == meta.checksum) {
                                 //its our candidate
                                 let content = this.decryptPayload(dialog.externalkey, keystore, payload.getContent());
                                 return Promise.resolve({ key, dialog, keystore, content });
