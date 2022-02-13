@@ -1508,15 +1508,7 @@ class App extends EventEmitter {
         let time = res.result;
         res = stream.uint32(res.offset);
         let checksum = parseInt(res.result).toString(16);
-
-        if (checksum.length == 2)
-            checksum = "000000" + checksum;
-
-        if (checksum.length == 4)
-            checksum = "0000" + checksum;
-
-        if (checksum.length == 6)
-            checksum = "00" + checksum;
+        checksum = checksum.padStart(8, 0);
 
         //version 1 - version|checksum|filter_to|encrypteddata
         //version 2 - version|checksum|filter_from|filter_to|encrypteddata
