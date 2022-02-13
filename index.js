@@ -1159,7 +1159,7 @@ class App extends EventEmitter {
                 if (version == Crypto.HELLOPUBLICKEY)
                     return Promise.all([
                         this.removeDialog(tempkey.publicKey, context.externalkey),
-                        this.addDialog(securekey.publicKey, context.externalkey, dialogName ? dialogName : "")//, dialog_name)
+                        this.addDialog(securekey.publicKey, context.external.key, dialogName ? dialogName : "")//, dialog_name)
                     ])
                         .then(() => {
                             return Promise.resolve(buffer);
@@ -1433,9 +1433,12 @@ class App extends EventEmitter {
                         })
                         .then((_newkeystore) => {
                             newkeystore = _newkeystore;
+                            context.meta.to = newkeystore.publicKey;
+                            context.meta.from = keys.new.getContent();
                             return this.addDialog(newkeystore.publicKey, keys.new.getContent()); //,dialog_name)
                         })
-                        .then(() => {
+                        .then((_dialog) => {
+                            context.dialog = _dialog;
                             return Promise.resolve(context);
                         })
                 }
