@@ -1301,23 +1301,28 @@ class App extends EventEmitter {
                                     if (!keystore)
                                         return Promise.reject('nulldialog/keystore');
 
+                            let dialog_prms = Promise.resolve(dialog);
                             if ((meta.version == Crypto.HELLOPUBLICKEY || meta.version == Crypto.TEMPKEY) && !dialog) {
                                 dialog = {
                                     externalkey: meta.publickey_from.getContent(),
                                     localkey: keystore.publicKey
                                 };
+                                dialog_prms = this.addDialog(dialog.localkey, dialog.externalkey);//todo: dialog name
                             }
 
-                            //todo, check by checksum
-                            let local = this.createMetaChecksum(dialog, meta.time);//outgoing message
-                            let local2 = this.createMetaChecksum({ localkey: dialog.externalkey, externalkey: dialog.localkey }, meta.time);
+                            return dialog_prms
+                                .then((_dialog) => {
+                                    //todo, check by checksum
+                                    let local = this.createMetaChecksum(_dialog, meta.time);//outgoing message
+                                    let local2 = this.createMetaChecksum({ localkey: _dialog.externalkey, externalkey: _dialog.localkey }, meta.time);
 
-                            if (local.checksum == meta.checksum || local2.checksum == meta.checksum) {
-                                //its our candidate
-                                let content = this.decryptPayload(dialog.externalkey, keystore, payload.getContent());
-                                return Promise.resolve({ key, dialog, keystore, content });
-                            } else
-                                return Promise.reject('invalidchecksum');
+                                    if (local.checksum == meta.checksum || local2.checksum == meta.checksum) {
+                                        //its our candidate
+                                        let content = this.decryptPayload(_dialog.externalkey, keystore, payload.getContent());
+                                        return Promise.resolve({ key, dialog: _dialog, keystore, content });
+                                    } else
+                                        return Promise.reject('invalidchecksum');
+                                })
 
                         })
                         .catch(e => {
