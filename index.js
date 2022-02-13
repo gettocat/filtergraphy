@@ -1516,7 +1516,7 @@ class App extends EventEmitter {
             checksum = "0000" + checksum;
 
         if (checksum.length == 6)
-            checksum = "0000" + checksum;
+            checksum = "00" + checksum;
 
         //version 1 - version|checksum|filter_to|encrypteddata
         //version 2 - version|checksum|filter_from|filter_to|encrypteddata
