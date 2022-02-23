@@ -937,14 +937,10 @@ class App extends EventEmitter {
                     promise = promise
                         .then(() => {
                             return new Promise((resolve, reject) => {
-                                this.emit('getDialogWithMedia', mediaName, (dialog) => {
-                                    if (!dialog) {
-                                        return reject('You are not followed to @' + mediaName);
-                                    }
-
-                                    this.emit('getKeyInfo', dialog.localkey, (_dialog, keystore) => {
-                                        resolve(keystore);
-                                    })
+                                this.emit('getKeyInfo', media_publicKey, (_dialog, keystore) => {
+                                    if (!keystore)
+                                        reject('Can not find keystore of media ' + mediaName + ' key');
+                                    resolve(keystore);
                                 })
                             })
                         })
